@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>gano channel</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+}
+
+/* 헤더 */
+.header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: white;
+}
+
+.profile {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: url('profile.jpg') center/cover;
+    margin-right: 20px;
+}
+
+.channel-info h2 {
+    margin: 0;
+}
+
+.channel-info p {
+    color: gray;
+    margin: 5px 0;
+}
+
+/* 영상 리스트 */
+.videos {
+    padding: 20px;
+}
+
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+/* 카드 */
+.video-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* 썸네일 */
+.thumbnail {
+    width: 100%;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+}
+
+/* 텍스트 */
+.video-info {
+    padding: 10px;
+}
+
+.video-title {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.video-meta {
+    font-size: 12px;
+    color: gray;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 채널 헤더 -->
+<div class="header">
+    <div class="profile"></div>
+    <div class="channel-info">
+        <h2>gano</h2>
+        <p>@ganaanomin6953</p>
+        <p>Insta: daraabolyidoo</p>
+    </div>
+</div>
+
+<!-- 영상 영역 -->
+<div class="videos">
+    <h3>Videos</h3>
+
+    <div class="video-grid">
+
+        <!-- 첫 번째 영상 (3번째 썸네일) -->
+        <div class="video-card">
+            <div class="thumbnail" style="background-image: url('thumbnail3.jpg');"></div>
+            <div class="video-info">
+                <div class="video-title">
+                    성수동 브이로그! 요즘 핫플 털기🔥 디올부터 하우스 노웨어까지✨
+                </div>
+                <div class="video-meta">
+                    1 view · 3 minutes ago
+                </div>
+            </div>
+        </div>
+
+        <!-- 두 번째 영상 (2번째 썸네일) -->
+        <div class="video-card">
+            <div class="thumbnail" style="background-image: url('thumbnail2.jpg');"></div>
+            <div class="video-info">
+                <div class="video-title">
+                    성수동 VLOG 요즘 핫플 정복🔥 디올부터 하우스 노웨어까지✨
+                </div>
+                <div class="video-meta">
+                    7 views · 13 minutes ago
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
