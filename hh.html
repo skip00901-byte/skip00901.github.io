@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gano YouTube Channel - Playlists</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', 'Noto Sans KR', sans-serif;
+            background-color: #fff;
+            color: #0f0f0f;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 1024px; /* 태블릿/데스크탑 크기 제한 */
+            padding-bottom: 70px; /* 하단 네비게이션 여백 */
+            box-sizing: border-box;
+        }
+        /* 상단 헤더 */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            position: sticky;
+            top: 0;
+            background-color: #fff;
+            z-index: 10;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-weight: 500;
+        }
+        .header-icons {
+            display: flex;
+            gap: 20px;
+        }
+        .header-icons .material-icons {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* 프로필 섹션 */
+        .profile-section {
+            display: flex;
+            padding: 16px;
+            gap: 16px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #e5e5e5; /* 임시 프로필 이미지 색상 */
+            object-fit: cover;
+        }
+        .profile-info {
+            flex-grow: 1;
+        }
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 0 4px 0;
+        }
+        .profile-handle {
+            font-size: 14px;
+            color: #606060;
+            margin: 0 0 4px 0;
+        }
+        .profile-desc {
+            font-size: 14px;
+            margin: 0 0 12px 0;
+        }
+        .profile-desc span {
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .profile-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .btn {
+            background-color: #f2f2f2;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn:hover { background-color: #e5e5e5; }
+
+        /* 탭 메뉴 */
+        .tabs {
+            display: flex;
+            padding: 0 16px;
+            border-bottom: 1px solid #e5e5e5;
+            position: sticky;
+            top: 52px; /* 헤더 아래 고정 */
+            background-color: #fff;
+            z-index: 9;
+        }
+        .tab {
+            padding: 12px 24px 12px 0;
+            font-size: 16px;
+            font-weight: 500;
+            color: #606060;
+            cursor: pointer;
+        }
+        .tab.active {
+            color: #0f0f0f;
+            border-bottom: 2px solid #0f0f0f;
+        }
+
+        /* 콘텐츠 섹션 공통 */
+        .content-section {
+            padding: 16px;
+            display: none; /* 기본적으로 숨김 */
+        }
+        .content-section.active {
+            display: block; /* 활성화된 탭만 표시 */
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .filter-dropdown {
+            font-size: 14px;
+            color: #606060;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        /* 비디오 그리드 */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .video-card {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        .thumbnail-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: #ddd; /* 썸네일 임시 배경색 */
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            box-sizing: border-box;
+            background-image: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+        }
+        .duration {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 3px 4px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .video-info {
+            padding-top: 12px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+        .video-title {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 4px;
+            padding-right: 10px;
+        }
+        .video-meta {
+            font-size: 12px;
+            color: #606060;
+        }
+
+        /* 재생목록 그리드 (Playlists Tab) */
+        .playlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        .playlist-card {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        .playlist-thumbnail {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: #e5e5e5;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            text-align: center;
+            background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+            color: #606060;
+        }
+        .playlist-count {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .playlist-info {
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .playlist-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            word-break: break-word;
+        }
+        .playlist-meta {
+            font-size: 12px;
+            color: #606060;
+        }
+        .more-vert {
+            color: #0f0f0f;
+            cursor: pointer;
+            margin-top: -4px;
+        }
+
+        /* 하단 네비게이션바 (모바일용) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #e5e5e5;
+            z-index: 100;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            color: #0f0f0f;
+            cursor: pointer;
+        }
+        .nav-item .material-icons {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        .nav-add {
+            font-size: 32px !important;
+            font-weight: 300;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="header-left">
+            <span class="material-icons">arrow_back_ios</span>
+            12:46 PM Tue Mar 24
+        </div>
+        <div class="header-icons">
+            <span class="material-icons">cast</span>
+            <span class="material-icons">search</span>
+            <span class="material-icons">more_vert</span>
+        </div>
+    </header>
+
+    <section class="profile-section">
+        <div class="profile-avatar"></div> <div class="profile-info">
+            <h1 class="profile-name">gano</h1>
+            <p class="profile-handle">@gananomine6953</p>
+            <p class="profile-desc">Insta: daraaboliyidoo <span>..more</span></p>
+            <div class="profile-buttons">
+                <button class="btn"><span class="material-icons" style="font-size: 16px;">bar_chart</span> Analytics</button>
+                <button class="btn"><span class="material-icons" style="font-size: 16px;">edit</span> Edit Channel</button>
+            </div>
+        </div>
+    </section>
+
+    <nav class="tabs">
+        <div class="tab active" data-tab="videos">Videos</div>
+        <div class="tab" data-tab="playlists">Playlists</div>
+        <div class="tab" style="color: #606060;">Posts</div>
+    </nav>
+
+    <main id="videos-section" class="content-section active">
+        <div class="section-header">
+            <div class="section-title">Videos</div>
+        </div>
+        <div class="video-grid">
+            <div class="video-card">
+                <div class="thumbnail-container">
+                    성수동 VLOG 요즘 핫플 정복!🔥<br>디올부터 하우스 노웨어까지 ✨
+                    <div class="duration">9:52</div>
+                </div>
+                <div class="video-info">
+                    <div>
+                        <div class="video-title">성수동 브이로그! 요즘 핫플 털기!🔥 디올 매장부터 하우스 노웨어까지 🌟 서울 성수동 카페거리 탐방</div>
+                        <div class="video-meta">1 view · 3 minutes ago</div>
+                    </div>
+                    <span class="material-icons more-vert">more_vert</span>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="thumbnail-container" style="background-image: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);">
+                    성수동 VLOG 요즘 핫플 정복!🔥<br>디올부터 하우스 노웨어까지 ✨
+                    <div class="duration">10:12</div>
+                </div>
+                <div class="video-info">
+                    <div>
+                        <div class="video-title">성수동 브이로그! 요즘 핫플 털기!🔥 디올 매장부터 하우스 노웨어까지 🌟 서울 성수동 카페거리 탐방</div>
+                        <div class="video-meta">7 views · 13 minutes ago</div>
+                    </div>
+                    <span class="material-icons more-vert">more_vert</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main id="playlists-section" class="content-section">
+        <div class="section-header">
+            <div class="section-title">Created playlists <span class="material-icons" style="font-size: 16px; color: #606060;">navigate_next</span></div>
+            <div class="filter-dropdown">
+                Date added (newest) <span class="material-icons">expand_more</span>
+            </div>
+        </div>
+        
+        <div class="playlist-grid">
+            <div class="playlist-card">
+                <div class="playlist-thumbnail" style="background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);">
+                    cs2 비디오 흐릿한 이미지 썸네일 (임시)
+                    <div class="playlist-count">
+                        <span class="material-icons" style="font-size: 14px;">playlist_play</span>
+                        3 videos
+                    </div>
+                </div>
+                <div class="playlist-info">
+                    <div>
+                        <div class="playlist-title">cs2</div>
+                        <div class="playlist-meta">Private · Playlist</div>
+                    </div>
+                    <span class="material-icons more-vert">more_vert</span>
+                </div>
+            </div>
+
+            <div class="playlist-card">
+                <div class="playlist-thumbnail" style="background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);">
+                    abs 2 운동 흐릿한 이미지 썸네일 (임시)
+                    <div class="playlist-count">
+                        <span class="material-icons" style="font-size: 14px;">playlist_play</span>
+                        1 video
+                    </div>
+                </div>
+                <div class="playlist-info">
+                    <div>
+                        <div class="playlist-title">abs 2</div>
+                        <div class="playlist-meta">Private · Playlist</div>
+                    </div>
+                    <span class="material-icons more-vert">more_vert</span>
+                </div>
+            </div>
+
+            <div class="playlist-card">
+                <div class="playlist-thumbnail" style="background-image: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);">
+                    <div style="background-color: rgba(255,255,255,0.8); color: #0f0f0f; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 11px;">
+                        AT HOME FOR BEGINNERS
+                    </div>
+                    <div class="playlist-count">
+                        <span class="material-icons" style="font-size: 14px;">playlist_play</span>
+                        9 videos
+                    </div>
+                </div>
+                <div class="playlist-info">
+                    <div>
+                        <div class="playlist-title">abs</div>
+                        <div class="playlist-meta">Private · Playlist</div>
+                    </div>
+                    <span class="material-icons more-vert">more_vert</span>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<nav class="bottom-nav">
+    <div class="nav-item">
+        <span class="material-icons">home</span>
+        Home
+    </div>
+    <div class="nav-item">
+        <span class="material-icons">play_circle_outline</span>
+        Shorts
+    </div>
+    <div class="nav-item">
+        <span class="material-icons nav-add">add_circle_outline</span>
+    </div>
+    <div class="nav-item">
+        <span class="material-icons">subscriptions</span>
+        Subscriptions
+    </div>
+    <div class="nav-item">
+        <span class="material-icons">person_outline</span>
+        You
+    </div>
+</nav>
+
+<script>
+    // 간단한 탭 전환 스크립트
+    const tabs = document.querySelectorAll('.tab[data-tab]');
+    const sections = document.querySelectorAll('.content-section');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // 모든 탭과 섹션에서 active 클래스 제거
+            tabs.forEach(t => t.classList.remove('active'));
+            sections.forEach(s => s.classList.remove('active'));
+
+            // 클릭한 탭과 해당하는 섹션에 active 클래스 추가
+            tab.classList.add('active');
+            const targetSection = document.getElementById(`${tab.dataset.tab}-section`);
+            targetSection.classList.add('active');
+        });
+    });
+</script>
+
+</body>
+</html>
